@@ -48,6 +48,16 @@ const [isNavExpanded, setIsNavExpanded] = useState(false);
                     setIsNavExpanded(!isNavExpanded);
                 }}>Sign Up</Link>
             </li>
+            <li>
+              <Link to="/books" onClick={() => {
+                setIsNavExpanded(!isNavExpanded);
+              }}>Books</Link>
+            </li>
+            <li>
+              <Link to="/user/:" onClick={() => {
+                setIsNavExpanded(!isNavExpanded);
+              }}>Manage</Link>
+            </li>
           </ul>
         </div>
       </nav>

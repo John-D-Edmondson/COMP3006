@@ -1,0 +1,26 @@
+[
+    {
+      "bookID":1,
+      "title": "The Cats Paws",
+      "author": "Jimmy Smith",
+      "image": "book1.jpg",
+      "blurb": "Lorem ipsum dolor sit amet. Vel provident voluptatem et dignissimos quam qui illum officia vel voluptatem veniam et molestias nobis et labore similique. Aut Quis adipisci eos sint dolorem sit officiis assumenda rem delectus deleniti aut repudiandae iste et omnis facilis aut ipsa voluptatum.",
+      "genres": ["Thriller", "Horror"],
+      "borrowed": true,
+      "dateBorrowed": "01/01/2020",
+      "dateReturned": "21/01/2020",
+      "borrowerID":"2"
+    },
+    {
+      "bookID":2,
+      "title": "A Space Adventure",
+      "author": "Kyle Poleaxe",
+      "image": "book2.jpg",
+      "blurb": "Lorem ipsum dolor sit amet. Ut odio fuga aut molestiae autem et cupiditate voluptatem sed molestiae error aut dolorem laboriosam. A unde porro quo obcaecati voluptatem ea nulla quisquam eum pariatur architecto est fugiat eveniet. Cum corporis perspiciatis ut error reiciendis ex porro soluta ut beatae illum sit fuga placeat.",
+      "genres": ["Science Fiction", "Romance"],
+      "borrowed": false,
+      "dateBorrowed": "",
+      "dateReturned":"",
+      "borrowerID":""
+    }
+  ]

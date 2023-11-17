@@ -1,0 +1,18 @@
+[
+    {
+        "userID":1,
+        "firstname":"Jeff",
+        "lastname": "Stelling",
+        "email": "anemail@something.com",
+        "password":"password",
+        "booksBorrowed":[]
+    },
+    {
+        "userID":2,
+        "firstname":"Hayley",
+        "lastname":"Drago",
+        "email":"anotheremail@something.com",
+        "password":"password1",
+        "booksBorrowed":[1]
+    }
+]

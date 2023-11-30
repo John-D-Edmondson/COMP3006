@@ -6,7 +6,6 @@ export function Signup() {
     return (
       <div>
         <DetailsForm signInOrUpdate="signup"></DetailsForm>
-      </div>
-      
+      </div>     
     )
   }

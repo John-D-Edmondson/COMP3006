@@ -14,6 +14,10 @@ export function Login() {
     password: '',
   });
 
+  const handleSignUpHere = () => {
+    navigate('/signup', {replace:true});
+  }
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -33,34 +37,6 @@ export function Login() {
       console.log("error signing in");
 
     }
-    
-    // try {
-    //   const response = await fetch('http://localhost:82/user/signin', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(formData),
-    //   });
-
-    //   if (response.ok) {
-    //     const { token, userID } = await response.json();
-    //     console.log('Authentication successful. Token:', token);
-    //     localStorage.setItem('authToken', token);
-    //     navigate(`/user`, { replace: true });
-    //     // Handle successful authentication
-    //   } else if (response.status === 401) {
-    //     const { message } = await response.json();
-    //     setError('Authentication failed: ' + message);
-    //   } else if (response.status === 500) {
-    //     setError('Authentication failed: Internal Server Error');
-    //   } else {
-    //     setError('Authentication failed with status: ' + response.status);
-    //   }
-    // } catch (error) {
-    //   console.error('Error during authentication:', error);
-    //   setError('Error during authentication');
-    // }
   };
 
 
@@ -93,9 +69,8 @@ export function Login() {
           </button>
         </div>
         {error && <p style={{ color: 'red' }}>{error}</p>}
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
+        <p></p>
+        <button type="button" className="btn btn-secondary" onClick={handleSignUpHere}>Sign Up Here</button>
       </form>
   )
 }

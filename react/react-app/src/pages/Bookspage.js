@@ -1,14 +1,23 @@
+import { getAllBooks } from "../Services/bookService";
 import { Book } from "../components/Book"
-// import booksData from '../testdata/booksdata.json'
-import React, { useState } from 'react';
-import { loadBookDataFromLocalStorage } from "../testdata/testDataLoader";
-
-
+import React, { useState, useEffect } from 'react';
 
 export function Bookspage() {
-  const booksData = loadBookDataFromLocalStorage();
+  const [booksData, setBooksData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBooks, setFilteredBooks] = useState(booksData);
+  const [filteredBooks, setFilteredBooks] = useState('');
+
+  useEffect(() => {
+    // Fetch all books when the component mounts
+    const fetchBooks = async () => {
+      const books = await getAllBooks();
+      if (books) {
+        setBooksData(books);
+      }
+    };
+
+    fetchBooks();
+  }, []);
 
   const handleSearch = (event) => {
     const query = event.target.value;
@@ -39,7 +48,7 @@ export function Bookspage() {
         
         <div className="books-list">
           {
-            filteredBooks.map((book, index)=> {
+            booksData.map((book, index)=> {
               return (<Book
                 id={book.bookID}
                 key={book.bookID}

@@ -1,0 +1,12 @@
+# .gitignore
+
+# Dependency directories
+node_modules/
+
+# Optional: Logs and debugging files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+pnpm-debug.log*
+pnpm-error.log*

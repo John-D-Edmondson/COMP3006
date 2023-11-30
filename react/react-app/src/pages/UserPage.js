@@ -1,81 +1,106 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect} from 'react';
 import { useState } from 'react';
-import { loadUserDataFromLocalStorage, loadBookDataFromLocalStorage, updateUserInLocalStorage, updateBookInLocalStorage } from '../testdata/testDataLoader';
+import { Book } from "../components/Book"
+import { returnBook } from '../Services/bookService';
+import { DetailsForm } from '../components/DetailsForm';
+import { useNavigate } from 'react-router-dom';
+import {fetchUserDetails} from '../Services/userService';
 
 export function UserPage() {
+    
+    const [user, setUser] = useState(null);
+    const [booksBorrowed, setBooksBorrowed] = useState([]);
+
+    const navigate = useNavigate();
+  
+    useEffect(() => {
+      const authToken = localStorage.getItem('authToken');
+
+      if (!authToken) {
+        // Handle the case where the authToken is not present
+        navigate('/login', { replace: true });
+        return;
+      }
+        
+      fetchUserDetails(authToken)
+        .then((fetchedUser) => {
+          console.log(fetchedUser);
+            setUser(fetchedUser);
+            setBooksBorrowed(fetchedUser.booksBorrowed);
+        })
+        .catch((error) => {
+          console.error('Error fetching user details:', error);
+        });
+
+      }, []);
 
 
-        const { id } = useParams();
 
-        const getUserById = (userId) => {
-            // Replace this with actual logic to fetch user data (e.g., from localStorage, API, etc.)
-            const usersData = loadUserDataFromLocalStorage();
-            return usersData.find((user) => user.userID === parseInt(userId, 10));
-        };
+    const handleReturnBook = async (bookID, userID) => {
+      console.log(bookID);
+      const success = await returnBook(bookID, userID);
+      if (success) {
+        setBooksBorrowed((booksBorrowed) => booksBorrowed.filter((book) => book.bookDetails.bookID !== bookID));
+        // Update state or perform any other necessary actions
+        console.log(`Book with ID ${bookID} returned successfully`);
+      } else {
+        // Handle the case where returning the book failed
+        console.error(`Failed to return book with ID ${bookID}`);
+      }
+    };
 
-        const [user, setUser] = useState(getUserById(id));
+    const handleSignOut = () => {
+      localStorage.clear();
+      navigate('/login', { replace: true });
+    }
 
-        if (!user) {
-            return <div>User not found</div>;
-        }
-
-        const handleReturnBook = (bookID) => {
-            const updatedUser = {
-                ...user,
-                booksBorrowed: user.booksBorrowed.filter((id) => id !== bookID),
-              };
-            updateUserInLocalStorage(updatedUser);
-
-            const booksData = loadBookDataFromLocalStorage();
-            const book = booksData.find((book) => book.bookID === bookID);
-            const updatedBooksData = { ...book,
-                                        borrowerID: "",
-                                        dateReturned: "",
-                                        dateBorrowed: "",
-                                        borrowed: false
-                                    } 
-           
-              updateBookInLocalStorage(updatedBooksData);
-
-
-            setUser(updatedUser);
-                 
-        }
 
   return (
+
     <div className="user-page">
-      <h1>{user.firstname}'s {user.lastname} Details</h1>
-      <p>Email: {user.email}</p>
+      {user ? (
+      <>
+        <h1>{user.firstName} {user.lastName}'s Profile</h1>
+        <p>Email: {user.email}</p>
+        <button type="button" className="btn btn-primary" onClick={handleSignOut}>Sign Out</button>
 
-      <h2>Borrowed Books</h2>
-      <ul>
-        {user.booksBorrowed.map((bookID) => {
-          const booksData = loadBookDataFromLocalStorage();
-          const book = booksData.find((book) => book.bookID === bookID);
+        <DetailsForm signInOrUpdate="update" existingUser={user}></DetailsForm>
+ 
+        <h2>Borrowed books</h2>
+        {user.booksBorrowed.length > 0 ? (
+          
+          <div className="books-list">
+            {booksBorrowed.map((borrowedBook) => (
+              <div key={borrowedBook.bookDetails._id}>
+                <Book
+                  id={borrowedBook.bookDetails.bookID}
+                  title={borrowedBook.bookDetails.title}
+                  author={borrowedBook.bookDetails.author}
+                  image={borrowedBook.bookDetails.image}
+                  blurb={borrowedBook.bookDetails.blurb}
+                  borrowed={borrowedBook.bookDetails.borrowed}
+                  dateBorrowed={borrowedBook.bookDetails.dateBorrowed}
+                  dateReturned={borrowedBook.bookDetails.dateReturned}
+                />
+                <button onClick={() => handleReturnBook(borrowedBook.bookDetails.bookID, user.userID)}>
+                  Return book
+                </button>
+              </div>
+            ))}
+          </div>
+          
+          
+        ) : (
+          <p>No books borrowed</p>
+        )
+        }
 
-          if (book) {
-            return (
-              <li key={book.bookID}>
-                <strong>{book.title}</strong>
-                <p>Borrowed Date: {book.dateBorrowed}</p>
-                <p>Return Date: {book.dateReturned}</p>
-                
-                  <button onClick={() => handleReturnBook(book.bookID)}>
-                    Return Book
-                  </button>
-                
-
-              </li>
-            );
-          } else {
-            // Handle the case where the book with the given ID is not found
-            return <li key={bookID}>Book not found</li>;
-          }
-        })}
-      </ul>
+        
+        
+      </>
+      ) : (
+        <p>Loading user details...</p>
+    )}
     </div>
   );
 };
-
-    

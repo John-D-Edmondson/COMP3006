@@ -74,3 +74,34 @@ export const createNewUser = async (formData) => {
     return false;
   }
 }
+
+export const userSignin = async (formData) => {
+  try {
+    const response = await fetch('http://localhost:82/user/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const { token, userID } = await response.json();
+      console.log('Authentication successful. Token:', token);
+      localStorage.setItem('authToken', token);
+      return true;
+ 
+      // Handle successful authentication
+    } else if (response.status === 401) {
+      const { message } = await response.json();
+      return ('Authentication failed: ' + message);
+    } else if (response.status === 500) {
+      return 'Authentication failed: Internal Server Error';
+    } else {
+      return ('Authentication failed with status: ' + response.status)
+    }
+  } catch (error) {
+    console.error('Error during authentication:', error);
+    return ('Error during authentication');
+  }
+};

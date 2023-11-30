@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import { isValidEmail } from "../utils/regex";
+import { userSignin } from "../Services/userService";
 
 
 
@@ -23,34 +24,43 @@ export function Login() {
       setError('Invalid email address');
       return;
     }
-    
-    try {
-      const response = await fetch('http://localhost:82/user/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
 
-      if (response.ok) {
-        const { token, userID } = await response.json();
-        console.log('Authentication successful. Token:', token);
-        localStorage.setItem('authToken', token);
-        navigate(`/user`, { replace: true });
-        // Handle successful authentication
-      } else if (response.status === 401) {
-        const { message } = await response.json();
-        setError('Authentication failed: ' + message);
-      } else if (response.status === 500) {
-        setError('Authentication failed: Internal Server Error');
-      } else {
-        setError('Authentication failed with status: ' + response.status);
-      }
-    } catch (error) {
-      console.error('Error during authentication:', error);
-      setError('Error during authentication');
+    const result = await userSignin(formData);
+
+    if (result) {
+      navigate(`/user`, { replace: true });
+    } else {
+      console.log("error signing in");
+
     }
+    
+    // try {
+    //   const response = await fetch('http://localhost:82/user/signin', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
+
+    //   if (response.ok) {
+    //     const { token, userID } = await response.json();
+    //     console.log('Authentication successful. Token:', token);
+    //     localStorage.setItem('authToken', token);
+    //     navigate(`/user`, { replace: true });
+    //     // Handle successful authentication
+    //   } else if (response.status === 401) {
+    //     const { message } = await response.json();
+    //     setError('Authentication failed: ' + message);
+    //   } else if (response.status === 500) {
+    //     setError('Authentication failed: Internal Server Error');
+    //   } else {
+    //     setError('Authentication failed with status: ' + response.status);
+    //   }
+    // } catch (error) {
+    //   console.error('Error during authentication:', error);
+    //   setError('Error during authentication');
+    // }
   };
 
 

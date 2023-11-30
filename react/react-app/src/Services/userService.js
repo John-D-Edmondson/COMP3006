@@ -1,6 +1,4 @@
 export const fetchUserDetails = async (authToken) => {
-
-    
     try {
       const response = await fetch(`http://localhost:82/user`, {
         method: 'GET',
@@ -25,3 +23,54 @@ export const fetchUserDetails = async (authToken) => {
       console.error('Error checking authentication:', error);
     }
   };
+
+export const updateUserDetails = async (formData) => {
+  try {
+    const response = await fetch(`http://localhost:82/user/update/`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+      const { message, userID } = await response.json();
+      console.log('User updated successfully');
+      return true;
+
+    } else {
+      console.error('Failed to update user');
+      return false;
+      // Handle error
+    }
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return false;
+    // Handle error
+  }
+}
+
+export const createNewUser = async (formData) => {
+  try {
+    const response = await fetch('http://localhost:82/user/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const { message, userID } = await response.json();
+      console.log('User created successfully');
+      return true;
+    } else {
+      console.error('Failed to create user');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return false;
+  }
+}

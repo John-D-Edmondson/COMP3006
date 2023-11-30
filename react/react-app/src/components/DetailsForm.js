@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAtLeastTwoLetter, isValidEmail, isValidPassword } from '../utils/regex';
+import {updateUserDetails, createNewUser} from '../Services/userService';
 
 
 export function DetailsForm({signInOrUpdate, existingUser}) {
@@ -79,27 +80,11 @@ export function DetailsForm({signInOrUpdate, existingUser}) {
           return;
         }
         
-
-        try {
-          const response = await fetch('http://localhost:82/user/signup', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-          });
-    
-          if (response.ok) {
-            const { message, userID } = await response.json();
-            console.log('User created successfully');
-            navigate(`/login`, { replace: true });
-          } else {
-            console.error('Failed to create user');
-            // Handle error
-          }
-        } catch (error) {
-          console.error('Error creating user:', error);
-          // Handle error
+        const result = createNewUser(formData);
+        if (result){
+          navigate(`/login`, { replace: true });  
+        } else {
+          console.error('Failed to create user');
         }
       };    
 
@@ -109,27 +94,13 @@ export function DetailsForm({signInOrUpdate, existingUser}) {
           return;
         }
 
-        try {
-          const response = await fetch(`http://localhost:82/user/update/`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-          });
-    
-          if (response.ok) {
-            const { message, userID } = await response.json();
-            console.log('User updated successfully');
-            setFormData({ ...formData, password: '', passwordRetype:''});
-            setDetailsUpdated(true);
-          } else {
-            console.error('Failed to update user');
-            // Handle error
-          }
-        } catch (error) {
-          console.error('Error updating user:', error);
-          // Handle error
+        const result = updateUserDetails(formData);
+        if (result){
+          setFormData({ ...formData, password: '', passwordRetype:''});
+          setDetailsUpdated(true);
+        } else {
+          console.error('Failed to update user');
+          setDetailsUpdated(false);
         }
       }
     

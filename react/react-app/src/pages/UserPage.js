@@ -50,7 +50,7 @@ export function UserPage() {
     };
 
     const handleSignOut = () => {
-      localStorage.clear();
+      localStorage.removeItem("authToken");
       navigate('/login', { replace: true });
     }
 

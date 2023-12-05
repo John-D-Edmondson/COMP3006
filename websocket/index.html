@@ -34,18 +34,20 @@
         return params.get(name);
         };
 
-        // Example: Accessing a parameter named 'roomId'
+        
         const name = getUrlParameter('name');
         console.log('name:', name);
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value) {
+
             const nameMsg = `${name}: ${input.value}`;
-            socket.emit('chat message', nameMsg);
+            const sendMsg = { userID: '12345', name: name, message: input.value};
+            socket.emit('chat message', sendMsg);
             
             const item = document.createElement('li');
-            item.textContent = nameMsg;
+            item.textContent = `${name}: ${input.value}`;
             item.style.backgroundColor = 'lightgreen';
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);

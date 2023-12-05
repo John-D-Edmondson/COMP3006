@@ -3,6 +3,7 @@ const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
 const connectToMongoDB = require('./MongoConnection');
+const ChatMessage = require('./chatModel');
 
 
 const app = express();
@@ -15,8 +16,25 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    socket.on('chat message', (msg) => {
-        socket.broadcast.emit('chat message', msg);
+    socket.on('chat message',  async (msg) => {
+      const { userID, name, message } = msg; 
+      socket.broadcast.emit('chat message', `${name}: ${message}`);
+        
+      const chatMsg = new ChatMessage({
+        userID: userID,
+        message: message
+      });
+
+      try {
+        // Save the chat message to the database
+        await chatMsg.save();
+
+        // Broadcast the message to all connected clients
+        io.emit('chat message', chatMsg);
+      } catch (error) {
+        console.error('Error saving chat message:', error);
+      }
+
     });
   });
 

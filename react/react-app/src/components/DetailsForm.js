@@ -45,7 +45,7 @@ export function DetailsForm({signInOrUpdate, existingUser}) {
           setValidFirstName(false);
           validForm = false;
         } else {
-          { setValidFirstName(true)}
+           setValidFirstName(true);
         }
 
         if(!isAtLeastTwoLetter(userInputs.lastName)){
@@ -107,7 +107,7 @@ export function DetailsForm({signInOrUpdate, existingUser}) {
         return (
           <form>
 
-            <h3>{signInOrUpdate == 'update' ? 'Update Details' : 'Sign Up'}</h3>
+            <h3>{signInOrUpdate === 'update' ? 'Update Details' : 'Sign Up'}</h3>
             <div className="mb-3">
               <label>First name</label>
               <input
@@ -169,7 +169,7 @@ export function DetailsForm({signInOrUpdate, existingUser}) {
               {!validMatchPassword && <p style={{ color: 'red' }}>Passwords must match</p>}
             </div>
             <div className="d-grid">
-            {signInOrUpdate == 'update' ? 
+            {signInOrUpdate === 'update' ? 
             <button type="button" className="btn btn-primary" onClick={handleUpdate}>Update</button> : 
             <button type="button" className="btn btn-primary" onClick={handleSignUp}>Sign Up</button>}
             {detailsUpdated && <p style={{ color: 'red' }}>Details Updated</p>}

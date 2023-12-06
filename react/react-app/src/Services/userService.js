@@ -13,8 +13,6 @@ export const fetchUserDetails = async (authToken) => {
         // User is authenticated
         const userData = await response.json();
         return (userData);
-
-        console.log('Authenticated user:', userData);
       } else {
         // User is not authenticated
         console.log('User not authenticated');
@@ -35,8 +33,6 @@ export const updateUserDetails = async (formData) => {
     });
 
     if (response.ok) {
-      const { message, userID } = await response.json();
-      console.log('User updated successfully');
       return true;
 
     } else {
@@ -62,7 +58,7 @@ export const createNewUser = async (formData) => {
     });
 
     if (response.ok) {
-      const { message, userID } = await response.json();
+    
       console.log('User created successfully');
       return true;
     } else {
@@ -86,7 +82,7 @@ export const userSignin = async (formData) => {
     });
 
     if (response.ok) {
-      const { token, userID } = await response.json();
+      const { token } = await response.json();
       console.log('Authentication successful. Token:', token);
       localStorage.setItem('authToken', token);
       return true;

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 export function Bookspage() {
   const [booksData, setBooksData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredBooks, setFilteredBooks] = useState('');
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
   useEffect(() => {
     // Fetch all books when the component mounts
@@ -13,6 +13,7 @@ export function Bookspage() {
       const books = await getAllBooks();
       if (books) {
         setBooksData(books);
+        setFilteredBooks(books);
       }
     };
 
@@ -48,7 +49,7 @@ export function Bookspage() {
         
         <div className="books-list">
           {
-            booksData.map((book, index)=> {
+            filteredBooks.map((book, index)=> {
               return (<Book
                 id={book.bookID}
                 key={book.bookID}

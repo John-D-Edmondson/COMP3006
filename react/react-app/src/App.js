@@ -8,17 +8,12 @@ import { Signup } from './pages/Signup';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { Bookspage } from './pages/Bookspage';
 import { UserPage } from './pages/UserPage';
-import { loadUserDataToLocalStorage, loadBooksDataToLocalStorage } from './testdata/testDataLoader';
 import { useEffect } from 'react';
 
 
 function App() {
   useEffect(() => {
-    // Load users data to localStorage
-    loadUserDataToLocalStorage();
 
-    // Load books data to localStorage
-    loadBooksDataToLocalStorage();
   }, []);
   return (
     <>

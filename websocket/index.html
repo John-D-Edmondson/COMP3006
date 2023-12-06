@@ -23,31 +23,36 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io();
+        // Get the current URL
+        const currentUrl = window.location.href;
+        // Create a URLSearchParams object
+        const urlParams = new URLSearchParams(currentUrl);
+        // Get the values of firstname, lastname, and userID
+        const firstname = urlParams.get('firstname');
+        const lastname = urlParams.get('lastname');
+        const userID = urlParams.get('userID');
+        const authToken = urlParams.get('authToken')
+        const socket = io({
+          query: {
+            userID,
+            authToken,
+          }
+          });
         const form = document.getElementById('form');
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
-
-                // Function to get URL parameters
-        const getUrlParameter = (name) => {
-        const params = new URLSearchParams(window.location.search);
-        return params.get(name);
-        };
-
-        
-        const name = getUrlParameter('name');
-        console.log('name:', name);
+        const fullName = `${firstname} ${lastname}`;
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value) {
 
-            const nameMsg = `${name}: ${input.value}`;
-            const sendMsg = { userID: '12345', name: name, message: input.value};
+            const nameMsg = `${fullName}: ${input.value}`;
+            const sendMsg = { userID: userID, name: fullName, message: input.value};
             socket.emit('chat message', sendMsg);
             
             const item = document.createElement('li');
-            item.textContent = `${name}: ${input.value}`;
+            item.textContent = nameMsg;
             item.style.backgroundColor = 'lightgreen';
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);

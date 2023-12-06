@@ -32,12 +32,14 @@ passport.use(new LocalStrategy(
       try {
 
         const user = await User.findOne({ email });
-
+        console.log(user);
         if (!user) {
           return done(null, false, { message: 'Incorrect email.' });
         }
-  
+        
+        console.log(password);
         const isPasswordMatch = await bcrypt.compare(password, user.password);
+        console.log(isPasswordMatch);
  
         if (!isPasswordMatch) {
           return done(null, false, { message: 'Incorrect password.' });
@@ -98,6 +100,32 @@ app.get('/user', extractUserIdMiddleware, UserController.getUserDetails);
 app.put('/book/return/:userID/:bookID', bookController.returnBook);
 app.put('/user/update/', UserController.updateUser);
 app.post('/user/signup', UserController.signup);
+app.get('/validate-token', (req, res) => {
+  const authToken = req.query.authToken;
+  const userIDFromWebSocket = req.query.userID;
+  
+  if (!authToken) {
+    return res.status(401).json({ message: 'Unauthorized - Token not provided' });
+  }
+
+  try {
+    // Verify the token
+    const decodedToken = jwt.verify(authToken, 'your-secret-key');
+    // Extract user ID from the decoded token
+    const userIDFromToken = decodedToken.userID;
+    console.log(userIDFromToken);
+    console.log(userIDFromWebSocket);
+    const isValid = userIDFromToken == userIDFromWebSocket;
+
+    // Add the user ID to the request object
+    if (isValid){
+      res.json({ isValid });
+    }
+    
+  } catch (error) {
+    return res.status(401).json({ message: 'Unauthorized - Invalid token' });
+  }
+});
 
 
 app.post('/user/signin', (req, res, next) => {
@@ -112,7 +140,7 @@ app.post('/user/signin', (req, res, next) => {
       }
   
       // If authentication is successful, create a JWT token
-      const token = jwt.sign({ userID: user.userID }, 'your-secret-key', { expiresIn: '1h' });
+      const token = jwt.sign({ userID: user.userID }, 'your-secret-key', { expiresIn: '12h' });
   
       // Set the token as an HTTP-only cookie
       

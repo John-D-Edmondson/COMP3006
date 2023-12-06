@@ -10,11 +10,11 @@ export function UserPage() {
     
     const [user, setUser] = useState(null);
     const [booksBorrowed, setBooksBorrowed] = useState([]);
-
+    const authToken = localStorage.getItem('authToken');
     const navigate = useNavigate();
   
     useEffect(() => {
-      const authToken = localStorage.getItem('authToken');
+      
 
       if (!authToken) {
         // Handle the case where the authToken is not present
@@ -54,6 +54,11 @@ export function UserPage() {
       navigate('/login', { replace: true });
     }
 
+    const handleLaunchChatroom = () => {
+      const url = `http://localhost:3001?&firstname=${user.firstName}&lastname=${user.lastName}&userID=${user.userID}&authToken=${authToken}`;
+      window.open(url, '_blank');
+    }
+
 
   return (
 
@@ -63,6 +68,7 @@ export function UserPage() {
         <h1>{user.firstName} {user.lastName}'s Profile</h1>
         <p>Email: {user.email}</p>
         <button type="button" className="btn btn-primary" onClick={handleSignOut}>Sign Out</button>
+        <button type='button' className='btn btn-primary' onClick={handleLaunchChatroom}>Launch Chatroom</button>
 
         <DetailsForm signInOrUpdate="update" existingUser={user}></DetailsForm>
  

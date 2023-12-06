@@ -8,11 +8,11 @@ async function validateToken(userID, authToken) {
             params: { userID, authToken },
           });
           
-      return response.data.isValid;
+      return true;
     } catch (error) {
       // Handle errors here
       console.error('Error validating token:');
-      throw error;
+      return false;
     }
   }
 

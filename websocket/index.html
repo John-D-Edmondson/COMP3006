@@ -65,6 +65,10 @@
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });
+          socket.on('redirect', (path) => {
+          // Redirect the page to the specified path
+          window.location.href = path;
+        });
     </script>
   </body>
 </html>

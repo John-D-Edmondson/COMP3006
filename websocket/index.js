@@ -16,6 +16,10 @@ app.get('/', (req, res) => {
     res.sendFile(join(__dirname, 'index.html'));
 });
 
+app.get('/403', (req, res) => {
+  res.sendFile(join(__dirname, '403.html'));
+})
+
 io.on('connection', async (socket) => {
   const { userID, authToken } = socket.handshake.query;
   console.log(userID);
@@ -28,9 +32,31 @@ io.on('connection', async (socket) => {
     if (isValid) {
       // Token is valid, proceed with your WebSocket logic
       console.log(`User ${userID} connected.`);
+
+      const currentDate = new Date().setUTCHours(0, 0, 0, 0); // Set the time to the beginning of the day
+      console.log(currentDate);
+      
+      try {
+        const todaysMessages = await ChatMessage.find({
+          timeSent: {
+            $gte: currentDate, // Greater than or equal to the start of the day
+            $lt: currentDate + 24 * 60 * 60 * 1000, // Less than the start of the next day
+          },
+        });
+      
+        console.log(todaysMessages);
+      
+        if (todaysMessages.length > 0) {
+          todaysMessages.forEach((message) => {
+            socket.emit('chat message', message.message);
+          });
+        }
+      } catch (error) {
+        console.error('Error retrieving messages:', error);
+      }
+            
       socket.on('chat message',  async (msg) => {
         const { userID, name, message } = msg;
-        
         const chatMsg = new ChatMessage({
           userID: userID,
           message: `${name}: ${message}`

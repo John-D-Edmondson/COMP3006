@@ -22,9 +22,6 @@ app.get('/403', (req, res) => {
 
 io.on('connection', async (socket) => {
   const { userID, authToken } = socket.handshake.query;
-  console.log(userID);
-  console.log(authToken);
-
   try {
     // Validate the token
     const isValid = await validateToken(userID, authToken);

@@ -9,7 +9,7 @@ const [isNavExpanded, setIsNavExpanded] = useState(false);
     return (
       <nav className="navigation">
         <Link to="/" className="brand-name">
-          MacroSoft
+          Online Library
         </Link>
         <button className="hamburger"
                 onClick={() => {

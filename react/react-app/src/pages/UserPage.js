@@ -14,8 +14,6 @@ export function UserPage() {
     const navigate = useNavigate();
   
     useEffect(() => {
-      
-
       if (!authToken) {
         // Handle the case where the authToken is not present
         navigate('/login', { replace: true });

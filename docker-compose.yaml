@@ -1,0 +1,16 @@
+version: '3'
+services:
+  nodeserver:
+    image: my-node-app:latest
+    ports:
+      - "82:8080"
+  websocket:
+    image: websocket:latest
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      NODE_SERVER_URL: "http://nodeserver:8080"
+    volumes:
+      - ./websocket:/app
+

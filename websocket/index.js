@@ -30,6 +30,7 @@ io.on('connection', async (socket) => {
       // Token is valid, proceed with your WebSocket logic
       console.log(`User ${userID} connected.`);
 
+      // get todays chat messages and send to new connection
       const currentDate = new Date().setUTCHours(0, 0, 0, 0); // Set the time to the beginning of the day
       console.log(currentDate);
       
@@ -47,7 +48,7 @@ io.on('connection', async (socket) => {
           todaysMessages.forEach((message) => {
             const messageData = {
               content: message.message,
-              userID: message.userID // Assuming the user ID is stored in the 'userId' property
+              userID: message.userID 
             };
             socket.emit('chat message', messageData);
           });
@@ -55,7 +56,8 @@ io.on('connection', async (socket) => {
       } catch (error) {
         console.error('Error retrieving messages:', error);
       }
-            
+      
+      // receive chat message, save message to db and broadcast
       socket.on('chat message',  async (msg) => {
         const { userID, name, message } = msg;
         const chatMsg = new ChatMessage({

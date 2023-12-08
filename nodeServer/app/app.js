@@ -14,7 +14,6 @@ const bookController = require('./Controllers/bookController');
 const connectToMongoDB = require('./MongooseDB/MongooseConnection');
 
 const UserController = require('./Controllers/userController');
-const { isAuthenticated, isAuthorized } = require('./Middleware/authMiddleware');
 const {extractUserIdMiddleware} = require('./Middleware/authMiddleware');
 
 let app = express();
@@ -154,3 +153,5 @@ app.post('/user/signin', (req, res, next) => {
 app.listen(port, () => {
  console.log('Running on port: ' + port);
 });
+
+module.exports = app;

@@ -32,17 +32,23 @@
         const lastname = urlParams.get('lastname');
         const userID = urlParams.get('userID');
         const authToken = urlParams.get('authToken')
+        const fullName = `${firstname} ${lastname}`;
+        
+
+        // connect to websocket- on same server so no need for url
         const socket = io({
           query: {
             userID,
             authToken,
           }
           });
+
+        // get DOM elements
         const form = document.getElementById('form');
         const input = document.getElementById('input');
         const messages = document.getElementById('messages');
-        const fullName = `${firstname} ${lastname}`;
 
+        // submissioon of message to socker, adds to page
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (input.value) {
@@ -59,6 +65,7 @@
             input.value = '';
             }
         });
+        // receiving chat message and displaying
         socket.on('chat message', (msg) => {
             const content = msg.content;
             const msgUserID = msg.userID;

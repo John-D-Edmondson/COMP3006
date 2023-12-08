@@ -13,4 +13,8 @@ services:
       NODE_SERVER_URL: "http://nodeserver:8080"
     volumes:
       - ./websocket:/app
+  react-front-end:
+    image: react-app:latest
+    ports:
+      - "3000:3000"
 

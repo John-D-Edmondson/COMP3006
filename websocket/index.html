@@ -60,8 +60,13 @@
             }
         });
         socket.on('chat message', (msg) => {
+            const content = msg.content;
+            const msgUserID = msg.userID;
+
             const item = document.createElement('li');
-            item.textContent = msg;
+            item.textContent = content;
+            if (msgUserID == userID) {item.style.backgroundColor = 'lightgreen'};
+
             messages.appendChild(item);
             window.scrollTo(0, document.body.scrollHeight);
         });

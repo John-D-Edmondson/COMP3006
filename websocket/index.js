@@ -45,7 +45,11 @@ io.on('connection', async (socket) => {
       
         if (todaysMessages.length > 0) {
           todaysMessages.forEach((message) => {
-            socket.emit('chat message', message.message);
+            const messageData = {
+              content: message.message,
+              userID: message.userID // Assuming the user ID is stored in the 'userId' property
+            };
+            socket.emit('chat message', messageData);
           });
         }
       } catch (error) {

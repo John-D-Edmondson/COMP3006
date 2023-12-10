@@ -22,4 +22,4 @@ jobs:
       run: cd nodeserver/app && npm install
 
     - name: Run tests
-      run: cd nodeserver/app/Test && mocha 'userController_test.js'
+      run: cd nodeserver/app/Test && npx mocha userController_tets

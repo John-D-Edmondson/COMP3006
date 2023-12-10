@@ -19,7 +19,7 @@ jobs:
         node-version: 18
 
     - name: Install dependencies
-      run: cd nodeServer/app && npm install
+      run: cd nodeserver/app && npm install
 
     - name: Run tests
-      run: cd nodeServer/app && npm test
+      run: cd nodeserver/app && npm test

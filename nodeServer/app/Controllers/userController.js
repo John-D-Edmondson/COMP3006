@@ -49,11 +49,11 @@ const UserController = {
       const token = jwt.sign({ userId: user.userID }, 'your-secret-key', { expiresIn: '1h' });
         // Set the token as an HTTP-only cookie
         res.cookie('authToken', token);
-
+        res.status(200);
         res.json({ success: true, token });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500);
     }
   },
   getUserDetails: async (req, res) => {
@@ -78,7 +78,7 @@ const UserController = {
                 };
             })
             );
-
+            res.status(200);
             // Return user details with detailed book information
             res.json({
             ...user.toObject(), // Convert to plain JavaScript object
@@ -86,7 +86,7 @@ const UserController = {
             });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500);
     }
   },
   updateUser: async (req, res) => {
@@ -106,15 +106,13 @@ const UserController = {
       existingUser.lastName = lastName;
       existingUser.email = email;
       existingUser.password = password;
-
-      console.log (existingUser);
       // Save the updated user
       await existingUser.save();
 
       res.status(200).json({ message: 'User updated successfully', userID: existingUser.userID });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500);
     }
   }
         

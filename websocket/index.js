@@ -24,7 +24,7 @@ io.on('connection', async (socket) => {
   const { userID, authToken } = socket.handshake.query;
   try {
     // Validate the token
-    const isValid = await validateToken(userID, authToken);
+    const isValid = await validateToken.validateToken(userID, authToken);
 
     if (isValid) {
       // Token is valid, proceed with your WebSocket logic

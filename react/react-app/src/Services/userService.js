@@ -43,7 +43,7 @@ export const updateUserDetails = async (formData) => {
   } catch (error) {
     console.error('Error updating user:', error);
     return false;
-    // Handle error
+  
   }
 }
 

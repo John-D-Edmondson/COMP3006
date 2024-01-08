@@ -41,9 +41,6 @@ io.on('connection', async (socket) => {
             $lt: currentDate + 24 * 60 * 60 * 1000, // Less than the start of the next day
           },
         });
-      
-        console.log(todaysMessages);
-      
         if (todaysMessages.length > 0) {
           todaysMessages.forEach((message) => {
             const messageData = {
@@ -69,7 +66,11 @@ io.on('connection', async (socket) => {
           // Save the chat message to the database
           await chatMsg.save();
           console.log('message saved');
-          socket.broadcast.emit('chat message', `${name}: ${message}`);
+          const messageData = {
+            content: message,
+            userID: userID 
+          };
+          socket.broadcast.emit('chat message', messageData);
         } catch (error) {
           console.error('Error saving chat message:', error);
         }

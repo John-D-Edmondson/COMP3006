@@ -67,8 +67,11 @@
         });
         // receiving chat message and displaying
         socket.on('chat message', (msg) => {
+            console.log(msg);
             const content = msg.content;
             const msgUserID = msg.userID;
+            console.log(msgUserID);
+            
 
             const item = document.createElement('li');
             item.textContent = content;

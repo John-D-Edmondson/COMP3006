@@ -67,7 +67,7 @@ io.on('connection', async (socket) => {
           await chatMsg.save();
           console.log('message saved');
           const messageData = {
-            content: message,
+            content: `${name}: ${message}`,
             userID: userID 
           };
           socket.broadcast.emit('chat message', messageData);
